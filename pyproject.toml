@@ -1,0 +1,18 @@
+[project]
+name = "omop-rag"
+version = "0.1.0"
+description = ""
+authors = [
+    {name = "holtyad",email = "tom.holt@answerdigital.com"}
+]
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+]
+
+[tool.poetry]
+packages = [{include = "omop_rag", from = "src"}]
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
