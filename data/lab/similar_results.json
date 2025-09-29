@@ -328,5 +328,115 @@
         "score": 0.8017
       }
     ]
+  },
+  {
+    "input": "blood co2",
+    "similar_concepts": [
+      {
+        "id": 3013290,
+        "name": "Carbon dioxide [Partial pressure] in Blood",
+        "score": 0.8857
+      },
+      {
+        "id": 3014094,
+        "name": "Carbon dioxide, total [Moles/volume] in Blood",
+        "score": 0.8699
+      },
+      {
+        "id": 3018225,
+        "name": "Carbon dioxide, total [Moles/volume] in Mixed venous blood",
+        "score": 0.8552
+      },
+      {
+        "id": 3023024,
+        "name": "Carbon dioxide [Partial pressure] in Capillary blood",
+        "score": 0.8518
+      },
+      {
+        "id": 3009293,
+        "name": "Carbon dioxide, total [Moles/volume] in Capillary blood",
+        "score": 0.8509
+      },
+      {
+        "id": 3021513,
+        "name": "Carbon dioxide [Partial pressure] in Mixed venous blood",
+        "score": 0.85
+      },
+      {
+        "id": 1617274,
+        "name": "Carbon dioxide, total [Moles/volume] in Central venous blood",
+        "score": 0.847
+      },
+      {
+        "id": 3027946,
+        "name": "Carbon dioxide [Partial pressure] in Arterial blood",
+        "score": 0.8461
+      },
+      {
+        "id": 3010140,
+        "name": "Carbon dioxide, total [Moles/volume] in Venous blood",
+        "score": 0.846
+      },
+      {
+        "id": 3031147,
+        "name": "Carbon dioxide, total [Moles/volume] in Blood by calculation",
+        "score": 0.8448
+      }
+    ]
+  },
+  {
+    "input": "wbc count",
+    "similar_concepts": [
+      {
+        "id": 3002317,
+        "name": "Cells Counted Total [#] in Blood",
+        "score": 0.7698
+      },
+      {
+        "id": 3029208,
+        "name": "Lymphocytes Plasmacytoid/Leukocytes in Blood by Manual count",
+        "score": 0.7638
+      },
+      {
+        "id": 43055366,
+        "name": "Lymphocytes/Leukocytes [Pure number fraction] in Blood by Manual count",
+        "score": 0.7627
+      },
+      {
+        "id": 3045984,
+        "name": "Lymphoblasts [#/volume] in Blood by Manual count",
+        "score": 0.7614
+      },
+      {
+        "id": 3003282,
+        "name": "Leukocytes [#/volume] in Blood by Manual count",
+        "score": 0.7607
+      },
+      {
+        "id": 3035215,
+        "name": "Cells Counted Total [#] in Bone marrow",
+        "score": 0.7593
+      },
+      {
+        "id": 3010813,
+        "name": "Leukocytes [#/volume] in Blood",
+        "score": 0.7581
+      },
+      {
+        "id": 3030505,
+        "name": "CD3+CD57+ cells [#/volume] in Blood",
+        "score": 0.7581
+      },
+      {
+        "id": 3038058,
+        "name": "Lymphocytes/Leukocytes in Blood by Manual count",
+        "score": 0.7578
+      },
+      {
+        "id": 3003215,
+        "name": "Lymphocytes [#/volume] in Blood by Manual count",
+        "score": 0.7575
+      }
+    ]
   }
 ]

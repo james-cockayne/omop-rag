@@ -5,3 +5,5 @@ o2 sat test,3016502,Oxygen saturation in Arterial blood
 ph blood,3010421,pH of Blood
 potassium levels in blood,21490733,Potassium [Mass/volume] in Blood
 na levels in blood,3000285,Sodium [Moles/volume] in Blood
+blood co2,3013290,Carbon dioxide [Partial pressure] in Blood
+wbc count,3002317,Cells Counted Total [#] in Blood

@@ -7,6 +7,12 @@ It leverages a **R**etrieval-**A**ugmented **G**eneration (RAG) approach:
 1. **Vector Search:** Uses a pre-trained clinical Sentence Transformer model (`MedEmbed-large-v0.1`) to find the top 10 most similar OMOP concepts (Retrieval) from the already vectorised `concept_embeddings.pt` file, which is a PyTorch vector database generated from all the LOINC lab test concepts in the `lab_concepts.csv` file.
 2.  **QA Matching:** Employs a Question-Answering (QA) model (`deepset/roberta-base-squad2`) to select the single best match from those 10 candidates (Generation/Refinement).
 
+## How does RAG work?
+
+![alt text](docs/image.png)
+
+In our case, the input documents are OMOP labratory test concepts. These are embedded into a vector database, which the user can query, to pull out closley related concepts to free text lab test events. Another LLM Agent can use this shortened context to provide a more accurate result and match.
+
 -----
 
 ## Installation
@@ -22,7 +28,7 @@ This project uses **Poetry** for dependency management.
 2.  **Clone the repository:**
 
     ```bash
-    git clone omop-rag
+    git clone https://github.com/answerdigital/omop-rag.git
     cd omop-rag
     ```
 
