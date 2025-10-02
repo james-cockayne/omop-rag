@@ -1,9 +1,9 @@
-raw_event_input,concept_id,concept_name
-Haemoglobin levels in blood,3005872,Hemoglobin [Presence] in Blood
-creatinine levels in blood,3051825,Creatinine [Mass/volume] in Blood
-o2 sat test,3016502,Oxygen saturation in Arterial blood
-ph blood,3010421,pH of Blood
-potassium levels in blood,21490733,Potassium [Mass/volume] in Blood
-na levels in blood,3000285,Sodium [Moles/volume] in Blood
-blood co2,3013290,Carbon dioxide [Partial pressure] in Blood
-wbc count,3002317,Cells Counted Total [#] in Blood
+raw_event_input,concept_id,concept_name,score
+Haemoglobin levels in blood,3005872,Hemoglobin [Presence] in Blood,0.866
+creatinine levels in blood,46235076,"Creatinine [Moles/volume] in Serum, Plasma or Blood",0.8512
+o2 sat test,3016502,Oxygen saturation in Arterial blood,0.6807
+ph blood,3010421,pH of Blood,0.9425
+potassium levels in blood,46235078,"Potassium [Moles/volume] in Serum, Plasma or Blood",0.8501
+na levels in blood,42528959,Sodium [Mass/volume] in Red Blood Cells,0.8452
+blood co2,3027946,Carbon dioxide [Partial pressure] in Arterial blood,0.8461
+wbc count,3003282,Leukocytes [#/volume] in Blood by Manual count,0.7607
