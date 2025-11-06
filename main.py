@@ -64,6 +64,14 @@ def main():
         required=True,
         help="Path to the output JSON file for results."
     )
+    search_parser.add_argument(
+        '--preprocessed', '--processed',
+        action='store_true',
+        help=(
+            "Use the 'EVENT_PROCESSED' column for similarity search while "
+            "keeping the raw 'EVENT' text in the output JSON."
+        )
+    )
 
     # Subparser for best-match
     best_match_parser = subparsers.add_parser(
@@ -120,7 +128,8 @@ def main():
             args.output_json,
             args.concepts_file,
             args.embeddings_file,
-            top_k=10
+            top_k=10,
+            processed_column="EVENT_PROCESSED" if args.preprocessed else None
         )
 
     elif args.command == 'best-match':

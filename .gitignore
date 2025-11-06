@@ -68,3 +68,6 @@ celeryd@*.pid
 # IPython
 profile_default/
 ipython_config.py
+
+# omop-rag
+results/

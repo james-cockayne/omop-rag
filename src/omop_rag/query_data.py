@@ -39,6 +39,8 @@ def load_vector_db_assets(concepts_file, embeddings_file):
         df = pd.read_csv(concepts_file)
         concepts = df.to_dict("records")
         stored_embeddings = torch.load(embeddings_file)
+        # Move the loaded embeddings tensor to the same device as the model.
+        stored_embeddings = stored_embeddings.to(device)
         print(
             f"Loaded {len(concepts)} concepts and their embeddings from disk."
         )
@@ -60,7 +62,7 @@ def query_vector_db(
     model, query_text, concepts_list, embeddings_tensor, device, top_k=5
 ):
     """Query the vector database to find the most similar concepts.
-
+    
     Args:
         model (SentenceTransformer): The pre-initialised sentence
             transformer model.
@@ -86,6 +88,8 @@ def query_vector_db(
     query_embedding = model.encode(
         query_text, convert_to_tensor=True, device=device
     )
+
+    embeddings_tensor = embeddings_tensor.to(query_embedding.dtype)
 
     cosine_scores = util.cos_sim(query_embedding, embeddings_tensor)[0]
     top_k_results = torch.topk(cosine_scores, k=top_k)

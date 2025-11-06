@@ -37,7 +37,7 @@ def load_embedding_model():
 
 
 @st.cache_data(show_spinner=False)
-def load_vector_db_data(concepts_file, embeddings_file):
+def load_vector_db_data(concepts_file, embeddings_file, device): # MODIFICATION 1: Add 'device' argument
     """Load and cache the concept and embedding data from disk.
 
     Uses Streamlit's cache_data decorator to prevent reloading data on
@@ -46,6 +46,7 @@ def load_vector_db_data(concepts_file, embeddings_file):
     Args:
         concepts_file (str): The file path for the concepts CSV.
         embeddings_file (str): The file path for the embeddings .pt tensor.
+        device (str): The torch device ('cuda' or 'cpu') to move the tensor to.
 
     Returns:
         tuple: A status string ("Success" or an error message), a list of
@@ -56,13 +57,15 @@ def load_vector_db_data(concepts_file, embeddings_file):
         concepts_df = pd.read_csv(concepts_file)
         concepts = concepts_df.to_dict("records")
         stored_embeddings = torch.load(embeddings_file)
+        # MODIFICATION 2: Move the tensor to the correct device
+        stored_embeddings = stored_embeddings.to(device)
         return "Success", concepts, stored_embeddings
     except FileNotFoundError as e:
         return f"Error: File not found. {e}", None, None
     except KeyError as e:
         return f"Error: Missing column in CSV. {e}", None, None
     except Exception as e:
-        return f"Error loading data: {e}", None, None
+        return f"Error: loading data: {e}", None, None
 
 
 def display_query_results(results_df):
@@ -124,8 +127,9 @@ def run_single_concept_lookup():
         if not model:
             return
 
+        # MODIFICATION 3: Pass the 'device' to the data loading function
         status, concepts, embeddings = load_vector_db_data(
-            concepts_file, embeddings_file
+            concepts_file, embeddings_file, device
         )
         if status != "Success":
             st.error(f"Data Loading Error: {status}")

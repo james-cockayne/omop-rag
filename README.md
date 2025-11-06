@@ -9,7 +9,7 @@ It leverages a **R**etrieval-**A**ugmented **G**eneration (RAG) approach:
 
 ## How does RAG work?
 
-![alt text](docs/image.png)
+![alt text](docs/image-1.png)
 
 In our case, the input documents are OMOP labratory test concepts. These are embedded into a vector database, which the user can query, to pull out closley related concepts to free text lab test events. Another LLM Agent can use this shortened context to provide a more accurate result and match.
 

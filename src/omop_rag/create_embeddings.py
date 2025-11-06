@@ -17,7 +17,7 @@ def vectorise_clinical_concepts(csv_file_path, output_dir, batch_size=32):
     """
 
     print("Loading the MedEmbed-Large-v1 model...")
-    model = SentenceTransformer('abhinand/MedEmbed-large-v0.1')
+    model = SentenceTransformer('abhinand/MedEmbed-large-v0.1', model_kwargs={"dtype": "float16"})
 
     # Check for GPU availability
     device = "cuda" if torch.cuda.is_available() else "cpu"
@@ -41,6 +41,9 @@ def vectorise_clinical_concepts(csv_file_path, output_dir, batch_size=32):
     # Process concepts in batches
     embeddings = []
     print("Starting vectorisation...")
+    # A more robust way to calculate total number of batches
+    total_batches = (len(concepts) + batch_size - 1) // batch_size
+
     for i in range(0, len(concepts), batch_size):
         batch = concepts[i:i + batch_size]
         batch_embeddings = model.encode(
@@ -49,7 +52,11 @@ def vectorise_clinical_concepts(csv_file_path, output_dir, batch_size=32):
             device=device
         )
         embeddings.append(batch_embeddings.cpu())
-        print(f"Processed batch {i // batch_size + 1}/{len(concepts) // batch_size + 1}")  # noqa: E501
+
+        current_batch = i // batch_size + 1
+        print(f"\rProcessing batch {current_batch}/{total_batches}...", end="")
+
+    print()
 
     final_embeddings = torch.cat(embeddings)
 
@@ -64,9 +71,10 @@ def vectorise_clinical_concepts(csv_file_path, output_dir, batch_size=32):
     torch.save(final_embeddings, embeddings_file_path)
     print(f"Embeddings saved to {embeddings_file_path}")
 
-    concepts_file_path = csv_input_file
-    df.to_csv(concepts_file_path, index=False)
-    print(f"Original concepts saved to {concepts_file_path}")
+    # Save the original concepts CSV to the output directory as well
+    concepts_output_path = os.path.join(output_dir, 'clinical_concepts.csv')
+    df.to_csv(concepts_output_path, index=False)
+    print(f"Original concepts saved to {concepts_output_path}")
 
     print("Vectorisation complete!")
     return final_embeddings
@@ -84,5 +92,5 @@ if __name__ == '__main__':
     )
 
     if embeddings is not None:
-        print(f"\nExample of the first embedding's shape: {embeddings[0].shape}")  # noqa: E501
-        print(f"Example of the first embedding vector:\n{embeddings[0][:5]}...")  # noqa: E501
+        print(f"\nExample of the first embedding's shape: {embeddings[0].shape}")
+        print(f"Example of the first embedding vector:\n{embeddings[0][:5]}...")

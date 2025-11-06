@@ -2,16 +2,21 @@ import json
 import re
 
 import pandas as pd
-import requests
+import lmstudio as lms
+
+# Use the identifier for the model you have loaded in LM Studio.
+MODEL_IDENTIFIER = "mistralai/mistral-7b-instruct-v0.3"
 
 
-def find_best_match(input_term: str, concepts_list: list) -> dict | None:
-    """Find the best matching concept using a request to an Ollama model.
+def find_best_match(
+    model, input_term: str, concepts_list: list
+) -> dict | None:
+    """Find the best matching concept using a request to an LM Studio model.
 
     Args:
+        model: An initialized model object from `lms.llm()`.
         input_term (str): The free-text input term to be matched.
-        concepts_list (list): A list of candidate concept dictionaries,
-            each expected to have 'id', 'name', and 'score'.
+        concepts_list (list): A list of candidate concept dictionaries.
 
     Returns:
         A dictionary representing the best matching concept chosen by the
@@ -52,19 +57,12 @@ text or explanation.
 }}
 """
 
-    ollama_api_url = "http://localhost:11434/api/generate"
-    payload = {
-        "model": "qwen3:1.7b",
-        "prompt": prompt,
-        "stream": False,
-        "options": {"temperature": 0.0},
-    }
-
+    model_output_str = ""
     try:
-        response = requests.post(ollama_api_url, json=payload, timeout=60)
-        response.raise_for_status()
-        response_data = response.json()
-        model_output_str = response_data.get("response", "{}").strip()
+        response_object = model.respond(prompt)
+        
+        # CORRECTED LINE: Convert the entire response object to a string.
+        model_output_str = str(response_object).strip()
 
         # Extract the JSON object from the model's potentially noisy output.
         match = re.search(r"\{.*\}", model_output_str, re.DOTALL)
@@ -73,12 +71,13 @@ text or explanation.
             best_match = json.loads(clean_json_str)
             return best_match
 
+        # If regex fails, raise an error to be caught below.
         raise json.JSONDecodeError(
             "No JSON object found in model output.", model_output_str, 0
         )
 
-    except requests.exceptions.RequestException as e:
-        print(f"Error communicating with Ollama API: {e}")
+    except Exception as e:
+        print(f"Error communicating with LM Studio model API: {e}")
         return None
     except json.JSONDecodeError:
         print(
@@ -95,12 +94,9 @@ def process_json_and_export_csv(
     """Process vector search results and export LLM-validated matches.
 
     Args:
-        input_json_path (str): Path to the input JSON file containing
-            search terms and their similar concepts.
-        output_csv_path (str): Path where the output CSV file will be
-            saved.
-        limit (int | None, optional): The maximum number of items to
-            process from the input file. Defaults to None (no limit).
+        input_json_path (str): Path to the input JSON file.
+        output_csv_path (str): Path where the output CSV file will be saved.
+        limit (int | None, optional): Max number of items to process.
     """
     try:
         with open(input_json_path, "r", encoding="utf-8-sig") as f:
@@ -112,7 +108,15 @@ def process_json_and_export_csv(
         print(f"Error decoding JSON from '{input_json_path}': {e}")
         return
 
-    print("Starting processing with Ollama model...")
+    try:
+        # Initialize the model using the lms.llm() high-level interface
+        model = lms.llm(MODEL_IDENTIFIER)
+    except Exception as e:
+        print(f"Failed to initialize LM Studio model: {e}")
+        print("Please ensure the LM Studio server is running and the model is loaded.")
+        return
+
+    print(f"Starting processing with LM Studio model: {MODEL_IDENTIFIER}...")
 
     results_for_csv = []
     items_to_process = data[:limit] if limit is not None else data
@@ -130,13 +134,11 @@ def process_json_and_export_csv(
             print(f"No concepts found for '{raw_event_input}'. Skipping.")
             continue
 
-        best_match = find_best_match(raw_event_input, similar_concepts)
+        best_match = find_best_match(
+            model, raw_event_input, similar_concepts
+        )
 
-        if best_match and all(k in best_match for k in [
-            "id",
-            "name",
-            "score"
-        ]):
+        if best_match and all(k in best_match for k in ["id", "name", "score"]):
             results_for_csv.append(
                 {
                     "raw_event_input": raw_event_input,
